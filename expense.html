@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Expense Tracker</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      /*background-color: #f9f9f9;*/
+      background: url('back2.png');
+      object-fit: cover;
+
+      padding: 20px;
+      color: #1d2423;
+    }
+
+    #container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .header {
+      text-align: center;
+      font-size: 2.5rem;
+      font-weight: 600;
+      margin-bottom: 40px;
+      color: #1d2423;
+    }
+
+    .budget-section,
+    .expense-section {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 30px;
+      flex-wrap: wrap;
+    }
+
+    .budget-input,
+    .expense-input {
+      padding: 12px 16px;
+      border: 2px solid #e0e0e0;
+      border-radius: 8px;
+      font-size: 16px;
+      width: 280px;
+      outline: none;
+      transition: border-color 0.3s;
+    }
+
+    .budget-input:focus,
+    .expense-input:focus {
+      border-color: #7c7c7c;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      background-color: #1d2423;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-weight: 500;
+    }
+
+    .btn:hover {
+      background-color: #2a332f;
+    }
+
+    #badges {
+      display: flex;
+      justify-content: center;
+      gap: 30px;
+      margin-bottom: 50px;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      background-color: white;
+      padding: 30px 20px;
+      border-radius: 16px;
+      text-align: center;
+      min-width: 180px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .badge:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 50);
+    }
+
+    .badge-icon {
+      width: 60px;
+      height: 60px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto 15px;
+      font-size: 24px;
+      color: white;
+    }
+
+    .budget-icon {
+      background-color: #7db3e8;
+    }
+
+    .expense-icon {
+      background-color: #f5c62b;
+    }
+
+    .balance-icon {
+      background-color: #7dd87d;
+    }
+
+    .badge-amount {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+      color: #1d2423;
+    }
+
+    .badge-label {
+      font-size: 1.1rem;
+      color: #7c7c7c;
+      font-weight: 500;
+    }
+
+    #details {
+      background-color: white;
+      border-radius: 16px;
+      padding: 30px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 40);
+    }
+
+    .bud-det-text {
+      font-size: 1.8rem;
+      color: #7c7c7c;
+      text-align: center;
+      margin-bottom: 30px;
+      font-weight: 500;
+    }
+
+    .list-div {
+      min-height: 100px;
+    }
+
+    #list {
+      list-style: none;
+    }
+
+    .expense-item {
+      background-color: #f9f9f9;
+      padding: 16px 20px;
+      border-radius: 12px;
+      margin-bottom: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      transition: background-color 0.3s;
+      animation: fadeInUp 0.4s ease forwards;
+    }
+
+    .expense-item:hover {
+      background-color: #f0f0f0;
+    }
+
+    .expense-name {
+      font-weight: 600;
+      color: #1d2423;
+      font-size: 1.1rem;
+    }
+
+    .expense-amount {
+      font-weight: 700;
+      color: #e74c3c;
+      font-size: 1.1rem;
+    }
+
+    .delete-btn {
+      background-color: #e74c3c;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      padding: 6px 10px;
+      cursor: pointer;
+      font-size: 12px;
+      margin-left: 10px;
+      transition: background-color 0.3s;
+    }
+
+    .delete-btn:hover {
+      background-color: #c0392b;
+    }
+
+    .empty-state {
+      text-align: center;
+      color: #9ca39e;
+      font-style: italic;
+      padding: 40px 20px;
+    }
+
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .header {
+        font-size: 2rem;
+      }
+
+      #badges {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .budget-section,
+      .expense-section {
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      .budget-input,
+      .expense-input {
+        width: 280px;
+      }
+    }
+    footer {
+  text-align: center;
+  color:  #261f1f;
+  margin-top: 30px;
+}
+  </style>
+</head>
+
+<body>
+  <section id="container">
+    <h1 class="header">Expense Tracker</h1>
+
+    <div class="budget-section">
+      <input type="number" id="budgetInput" class="budget-input" placeholder="Enter your Budget..." min="0" step="0.01">
+      <button id="calBtn" class="btn">Calculate</button>
+    </div>
+
+    <div class="expense-section">
+      <input type="text" id="productInput" class="expense-input" placeholder="Product Details" required>
+      <input type="number" id="priceValue" class="expense-input" placeholder="Enter Your Price" min="0" step="0.01" required>
+      <button id="addBtn" class="btn">Add Expense</button>
+    </div>
+
+    <section id="badges">
+      <div class="badge">
+        <div class="badge-icon budget-icon">
+          <i class="fas fa-credit-card"></i>
+        </div>
+        <div id="budgetNumber" class="badge-amount">$0</div>
+        <div class="badge-label">Budget</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon expense-icon">
+          <i class="fas fa-receipt"></i>
+        </div>
+        <div id="expenseNumber" class="badge-amount">$0</div>
+        <div class="badge-label">Expenses</div>
+      </div>
+
+      <div class="badge">
+        <div class="badge-icon balance-icon">
+          <i class="fas fa-dollar-sign"></i>
+        </div>
+        <div id="balNumber" class="badge-amount">$0</div>
+        <div class="badge-label">Balance</div>
+      </div>
+    </section>
+
+    <section id="details">
+      <h1 class="bud-det-text">Budget details</h1>
+      <div class="list-div">
+        <ul id="list">
+          <div class="empty-state">No expenses added yet</div>
+        </ul>
+      </div>
+    </section>
+  </section>
+
+   <footer>© 2025 Agbaka Albert .O. Emmanuel </footer>
+
+  <script src="script.js"></script>
+  
+</body>
+</html>
